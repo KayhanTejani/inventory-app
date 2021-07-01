@@ -10,7 +10,26 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    console.log(req.body);
+    insertRecord(req, res);
 });
+
+
+function insertRecord(req, res) {
+    const product = new Product({
+        name: req.body.name,
+        price: req.body.price,
+        quantity: req.body.quantity,
+        category: req.body.category
+    });
+    
+    product.save((err, doc) => {
+        if (!err) {
+            res.redirect('/');
+        }
+        else {
+            console.log('Error during product record insertion: ' + err);
+        }
+    });
+}
 
 module.exports = router;

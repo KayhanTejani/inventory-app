@@ -58,4 +58,15 @@ router.get('/:id', (req, res) => {
     }).lean();
 });
 
+
+router.get('/delete/:id', (req, res) => {
+    Product.findByIdAndRemove(req.params.id, (err, doc) => {
+        if (!err)
+            res.redirect("/");
+        else
+            console.log("Error while deleting product: " + err);
+    })
+});
+
+
 module.exports = router;

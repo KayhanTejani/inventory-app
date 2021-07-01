@@ -4,6 +4,9 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const exphbs = require('express-handlebars');
+const mongoose = require('mongoose');
+const Product = require('./models/product.model');
+
 
 const productRoute = require('./routes/product');
 
@@ -23,3 +26,16 @@ app.listen(3000, () => {
 });
 
 app.use('/product', productRoute);
+
+app.get('/', (req, res) => {
+    Product.find((err, docs) => {
+        if (!err) {
+            res.render("product/list", {
+                list: docs
+            });
+        }
+        else {
+            console.log('Error in retrieving product list: ' + err);
+        }
+    }).lean();
+})

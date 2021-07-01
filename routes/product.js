@@ -10,7 +10,10 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    insertRecord(req, res);
+    if (req.body._id == "")
+        insertRecord(req, res);
+    else
+        updateRecord(req, res);
 });
 
 
@@ -31,5 +34,28 @@ function insertRecord(req, res) {
         }
     });
 }
+
+function updateRecord(req, res) {
+    Product.findOneAndUpdate({ _id: req.body._id}, req.body, { new: true }, (err, doc) => {
+        if (!err) {
+            res.redirect('/');
+        }
+        else {
+            console.log('Error during record update: ' + err);
+        }
+    });
+}
+
+
+router.get('/:id', (req, res) => {
+    Product.findById(req.params.id, (err, doc) => {
+        if (!err) {
+            res.render("product/addOrEdit", {
+                viewTitle: "Update Product",
+                product: doc
+            });
+        }
+    }).lean();
+});
 
 module.exports = router;

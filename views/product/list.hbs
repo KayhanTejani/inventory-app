@@ -1,6 +1,43 @@
 <h3>Product List</h3>
 
-<a class="btn btn-secondary" href="/product" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Create New</a>
+<form>
+    <div class="form-group">
+        <div class="input-group rounded">
+            <input type="text" class="form-control rounded col-md-3" name="name" placeholder="Search" aria-label="Search"
+            aria-describedby="search-addon" />
+            <button type="submit" class="input-group-text border-0">
+                <i class="fa fa-search"></i>
+            </button>
+            <a class="btn btn-secondary" href="/product" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Create New</a>
+        </div>
+    </div>
+</form>
+
+<form>
+    <select class="form-select form-select-sm" name="sort" onchange="this.form.submit();" aria-label=".form-select-sm example" style="float:right;">
+        <option selected>Sort by:</option>
+        <option value="price-low-high">Price: Low to High</option>
+        <option value="price-high-low">Price: High to Low</option>
+        <option value="name-order">Name</option>
+    </select>
+</form>
+
+<form>
+    <select class="form-select form-select-sm" name="option" id="filterOption"
+        aria-label=".form-select-sm example" style="float:left;">
+        <option selected>Select filter:</option>
+        <option value="equals">Price: Equals</option>
+        <option value="less-than">Price: Less than</option>
+        <option value="less-than-equal">Price: Less than or equal</option>
+        <option value="greater-than">Price: Greater than</option>
+        <option value="greater-than-equal">Price: Greater than or equal</option>
+    </select>
+    <input type="text" id="filterBox" class="form-control rounded small col-md-1" name="filterValue" style="float:left; visibility:hidden;">
+    <button type="submit" id="filterSubmit" style="float:left; visibility:hidden;">Filter</button>
+</form>
+
+<br>
+
 <table class="table table-striped">
     <thead>
         <tr>

@@ -28,6 +28,58 @@ app.listen(3000, () => {
 app.use('/product', productRoute);
 
 app.get('/', (req, res) => {
+    if (!req.query.sort) {
+        Product.find((err, docs) => {
+            if (!err) {
+                res.render("product/list", {
+                    list: docs
+                });
+            }
+            else {
+                console.log('Error in retrieving product list: ' + err);
+            }
+        }).lean()
+    }
+    else {
+        let sortQuery = req.query.sort;
+        console.log(sortQuery);
+        if (sortQuery == "price-low-high" || sortQuery == "price-high-low") {
+            sortByPrice(sortQuery, req, res);
+        }
+        else {
+            sortByName(req, res);
+        }
+    }
+});
+
+function sortByPrice(query, req, res) {
+    if (query == "price-low-high") {
+        Product.find((err, docs) => {
+            if (!err) {
+                res.render("product/list", {
+                    list: docs
+                });
+            }
+            else {
+                console.log("Error while sorting");
+            }
+        }).sort({price:1}).lean();
+    }
+    else {
+        Product.find((err, docs) => {
+            if (!err) {
+                res.render("product/list", {
+                    list: docs
+                });
+            }
+            else {
+                console.log("Error while sorting");
+            }
+        }).sort({price:-1}).lean();
+    }
+}
+
+function sortByName(req, res) {
     Product.find((err, docs) => {
         if (!err) {
             res.render("product/list", {
@@ -35,7 +87,7 @@ app.get('/', (req, res) => {
             });
         }
         else {
-            console.log('Error in retrieving product list: ' + err);
+            console.log("Error while sorting by name");
         }
-    }).lean();
-})
+    }).collation({'locale':'en'}).sort({name:1}).lean();
+}

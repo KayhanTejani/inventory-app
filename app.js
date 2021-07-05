@@ -91,3 +91,59 @@ function sortByName(req, res) {
         }
     }).collation({'locale':'en'}).sort({name:1}).lean();
 }
+
+
+app.get('/filter', (req, res) => {
+    let filter = req.query.option;
+    let value = req.query.filterValue;
+    
+    if (isNaN(value) || value.length == 0) {
+        res.redirect('/');
+    }
+
+    if (filter == "equals") {
+        Product.find({price: {$eq: value}}, (err, docs) => {
+                        if (!err) {
+                            res.render("product/list", {
+                                list: docs
+                            });
+                        }
+                    }).lean();
+    }
+    else if (filter == "less-than") {
+        Product.find({price: {$lt: value}}, (err, docs) => {
+                        if (!err) {
+                            res.render("product/list", {
+                                list: docs
+                            });
+                        }
+                    }).lean();
+    }
+    else if (filter == "less-than-equal") {
+        Product.find({price: {$lte: value}}, (err, docs) => {
+                        if (!err) {
+                            res.render("product/list", {
+                                list: docs
+                            });
+                        }
+                    }).lean();
+    }
+    else if (filter == "greater-than") {
+        Product.find({price: {$gt: value}}, (err, docs) => {
+                        if (!err) {
+                            res.render("product/list", {
+                                list: docs
+                            });
+                        }
+                    }).lean();
+    }
+    else {
+        Product.find({price: {$gte: value}}, (err, docs) => {
+                        if (!err) {
+                            res.render("product/list", {
+                                list: docs
+                            });
+                        }
+                    }).lean();
+    }
+});

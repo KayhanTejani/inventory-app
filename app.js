@@ -9,6 +9,7 @@ const Product = require('./models/product.model');
 
 
 const productRoute = require('./routes/product');
+const authRoute = require('./routes/auth');
 
 app.use(express.urlencoded({
     extended: true
@@ -25,7 +26,6 @@ app.listen(3000, () => {
     console.log("Express server started at port : 3000");
 });
 
-app.use('/product', productRoute);
 
 app.get('/', (req, res) => {
     if (!req.query.sort) {
@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
             else {
                 console.log('Error in retrieving product list: ' + err);
             }
-        }).lean()
+        }).lean();
     }
     else {
         let sortQuery = req.query.sort;
@@ -165,3 +165,7 @@ app.get('/filter', (req, res) => {
                     }).lean();
     }
 });
+
+
+app.use('/product', productRoute);
+app.use('/user', authRoute);

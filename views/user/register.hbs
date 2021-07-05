@@ -1,0 +1,29 @@
+<h3>{{viewTitle}}</h3>
+
+<div class="signup-form">
+    <form action="/user/register" method="POST">
+        <p>Please fill in this form to create an account!</p>
+        <hr>
+        <div class="form-group w-50">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-user"></i></span>
+				<input type="text" class="form-control" name="name" placeholder="Full Name" required="required">
+			</div>
+        </div>
+        <div class="form-group w-50">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-paper-plane"></i></span>
+				<input type="email" class="form-control" name="email" placeholder="Email Address" required="required">
+			</div>
+        </div>
+		<div class="form-group w-50">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+				<input type="text" class="form-control" name="password" placeholder="Password" required="required">
+			</div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-info">Sign Up</button>
+        </div>
+    </form>
+</div>

@@ -93,6 +93,24 @@ function sortByName(req, res) {
 }
 
 
+app.get('/search', (req, res) => {
+    let searchName = req.query.name;
+    let regex = RegExp(".*" + searchName + ".*")
+    Product.find(
+        {
+            "$or": [
+                { name: regex },
+                { category: regex }
+            ]
+        }, (err, doc) => {
+            if (!err)
+                res.render("product/list", {
+                    list: doc
+                });
+        }).lean();
+});
+
+
 app.get('/filter', (req, res) => {
     let filter = req.query.option;
     let value = req.query.filterValue;

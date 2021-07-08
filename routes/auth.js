@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const User = require('../models/user.model');
+const { registerValidation, loginValidation } = require('../validation');
 
 
 router.get('/register', async (req, res) => {
@@ -13,6 +14,12 @@ router.get('/register', async (req, res) => {
 
 
 router.post('/register', async (req, res) => {
+    //VALIDATE DATA BEFORE USER IS CREATED
+    const { error } = registerValidation(req.body);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    };
+
     //Check if user is already in the database
     const emailExists = await User.findOne({
         email: req.body.email
@@ -51,6 +58,12 @@ router.get('/login', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
+    //VALIDATE DATA BEFORE USER IS LOGGED IN
+    const { error } = loginValidation(req.body);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    };
+
     //Check if email exists
     const user = await User.findOne({
         email: req.body.email

@@ -50,4 +50,24 @@ router.get('/login', async (req, res) => {
 });
 
 
+router.post('/login', async (req, res) => {
+    //Check if email exists
+    const user = await User.findOne({
+        email: req.body.email
+    }).lean();
+    if (!user) {
+        return res.status(400).send('Email or password is incorrect');
+    };
+
+    //Check if password is correct
+    const validPass = await bcrypt.compare(req.body.password, user.password);
+    if (!validPass) {
+        return res.status(400).send('Email or password is incorrect');
+    }
+    else {
+        res.redirect('/');
+    }
+});
+
+
 module.exports = router;

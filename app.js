@@ -5,8 +5,11 @@ const app = express();
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const Product = require('./models/product.model');
+const verifyToken = require('./routes/verifyToken');
 
+app.use(cookieParser());
 
 const productRoute = require('./routes/product');
 const authRoute = require('./routes/auth');
@@ -27,7 +30,7 @@ app.listen(3000, () => {
 });
 
 
-app.get('/', (req, res) => {
+app.get('/', verifyToken, (req, res) => {
     if (!req.query.sort) {
         Product.find((err, docs) => {
             if (!err) {

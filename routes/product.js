@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Product = require('../models/product.model');
+const verifyToken = require('./verifyToken');
 
-router.get('/', (req, res) => {
+router.get('/', verifyToken, (req, res) => {
     res.render("product/addOrEdit", {
         viewTitle: "Create Product Entry"
     });
@@ -47,7 +48,7 @@ function updateRecord(req, res) {
 }
 
 
-router.get('/:id', (req, res) => {
+router.get('/:id', verifyToken, (req, res) => {
     Product.findById(req.params.id, (err, doc) => {
         if (!err) {
             res.render("product/addOrEdit", {
@@ -59,7 +60,7 @@ router.get('/:id', (req, res) => {
 });
 
 
-router.get('/delete/:id', (req, res) => {
+router.get('/delete/:id', verifyToken, (req, res) => {
     Product.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err)
             res.redirect("/");

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const User = require('../models/user.model');
 const { registerValidation, loginValidation } = require('../validation');
 
@@ -77,9 +79,15 @@ router.post('/login', async (req, res) => {
     if (!validPass) {
         return res.status(400).send('Email or password is incorrect');
     }
-    else {
-        res.redirect('/');
-    }
+    
+    jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '300s'},  (err, token) => {
+        if (err) {
+            res.json('Invalid credentials');
+        } else {
+            res.cookie('jwt', 'Bearer '+ token);
+            res.redirect('/');
+        }
+    });
 });
 
 

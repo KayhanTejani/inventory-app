@@ -8,11 +8,13 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const Product = require('./models/product.model');
 const verifyToken = require('./routes/verifyToken');
-
-app.use(cookieParser());
-
+const appHelpers = require('./helpers/appHelpers');
+const dbHelpers = require('./helpers/dbHelpers');
 const productRoute = require('./routes/product');
 const authRoute = require('./routes/auth');
+
+
+app.use(cookieParser());
 
 app.use(express.urlencoded({
     extended: true
@@ -37,24 +39,29 @@ app.listen(process.env.PORT || 3000, function(){
 });
 
 
-app.get('/', verifyToken, (req, res) => {
+app.get('/', verifyToken, async (req, res, next) => {
     if (!req.query.sort) {
-        Product.find((err, docs) => {
-            if (!err) {
-                res.render("product/list", {
-                    list: docs
-                });
-            }
-            else {
-                console.log('Error in retrieving product list: ' + err);
-            }
-        }).lean();
+        // Product.find((err, docs) => {
+        //     if (!err) {
+        //         res.render("product/list", {
+        //             list: docs
+        //         });
+        //     }
+        //     else {
+        //         console.log('Error in retrieving product list: ' + err);
+        //     }
+        // }).lean();
+        await appHelpers.getItems(req, res, next);
     }
     else {
-        let sortQuery = req.query.sort;
+        const sortQuery = req.query.sort;
         console.log(sortQuery);
         if (sortQuery == "price-low-high" || sortQuery == "price-high-low") {
             sortByPrice(sortQuery, req, res);
+            const sortedItems = appHelpers.sortByPrice(sortQuery, req, res);
+            res.render("product/list", {
+                list: sortedItems
+            });
         }
         else {
             sortByName(req, res);

@@ -28,7 +28,7 @@ async function sortItemsPrice(query, next) {
                 const errorMessage = `Error sorting products list: ${err}`;
                 handleError(errorMessage, next);
             }
-        }).sort({price:1}).lean();
+        }).sort({ price: 1 }).lean();
         return items;
     }
     const items = await Product.find((err, findResult) => {
@@ -52,8 +52,67 @@ async function sortItemsName(next) {
 }
 
 
+async function searchItemsName(query, next) {
+    const regex = RegExp(".*" + query + ".*", 'i');
+    const items = await Product.find({
+        "$or": [
+            { name: regex },
+            { category: regex }
+        ]
+    }, (err, findResult) => {
+        if (err) {
+            const errorMessage = `Error seaching products list: ${err}`;
+            handleError(errorMessage, next);
+        }
+    }).lean();
+    return items;
+}
+
+
+async function filterItemsList(filter, value, next) {
+    switch (filter) {
+        case "equals":
+            return Product.find({price: {$eq: value}}, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering products list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+        case "less-than":
+            return Product.find({price: {$lt: value}}, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering products list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+        case "less-than-equal":
+            return Product.find({price: {$lte: value}}, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering products list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+        case "greater-than":
+            return Product.find({price: {$gt: value}}, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering products list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+        case "greater-than-equal":
+            return Product.find({price: {$gte: value}}, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering products list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+    }
+}
+
 module.exports = {
     getItems,
     sortItemsPrice,
-    sortItemsName
+    sortItemsName,
+    searchItemsName,
+    filterItemsList
 }

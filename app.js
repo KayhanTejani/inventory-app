@@ -52,77 +52,16 @@ app.get('/', verifyToken, async (req, res, next) => {
 });
 
 
-app.get('/search', (req, res) => {
-    let searchName = req.query.name;
-    let regex = RegExp(".*" + searchName + ".*")
-    Product.find(
-        {
-            "$or": [
-                { name: regex },
-                { category: regex }
-            ]
-        }, (err, doc) => {
-            if (!err)
-                res.render("product/list", {
-                    list: doc
-                });
-        }).lean();
+app.get('/search', verifyToken, async (req, res, next) => {
+    const searchQuery = req.query.name;
+    await appHelpers.searchItems(searchQuery, req, res, next);
 });
 
 
-app.get('/filter', (req, res) => {
-    let filter = req.query.option;
-    let value = req.query.filterValue;
-    
-    if (isNaN(value) || value.length == 0) {
-        res.redirect('/');
-    }
-
-    if (filter == "equals") {
-        Product.find({price: {$eq: value}}, (err, docs) => {
-                        if (!err) {
-                            res.render("product/list", {
-                                list: docs
-                            });
-                        }
-                    }).lean();
-    }
-    else if (filter == "less-than") {
-        Product.find({price: {$lt: value}}, (err, docs) => {
-                        if (!err) {
-                            res.render("product/list", {
-                                list: docs
-                            });
-                        }
-                    }).lean();
-    }
-    else if (filter == "less-than-equal") {
-        Product.find({price: {$lte: value}}, (err, docs) => {
-                        if (!err) {
-                            res.render("product/list", {
-                                list: docs
-                            });
-                        }
-                    }).lean();
-    }
-    else if (filter == "greater-than") {
-        Product.find({price: {$gt: value}}, (err, docs) => {
-                        if (!err) {
-                            res.render("product/list", {
-                                list: docs
-                            });
-                        }
-                    }).lean();
-    }
-    else {
-        Product.find({price: {$gte: value}}, (err, docs) => {
-                        if (!err) {
-                            res.render("product/list", {
-                                list: docs
-                            });
-                        }
-                    }).lean();
-    }
+app.get('/filter', verifyToken, async (req, res, next) => {
+    const filter = req.query.option;
+    const value = req.query.filterValue;
+    await appHelpers.filterItems(filter, value, req, res, next);
 });
 
 

@@ -1,18 +1,20 @@
 require('./models/db');
 
 const express = require('express');
-const app = express();
 const path = require('path');
 const exphbs = require('express-handlebars');
-const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const Product = require('./models/product.model');
 const verifyToken = require('./routes/verifyToken');
 const appHelpers = require('./helpers/appHelpers');
-const dbHelpers = require('./helpers/dbHelpers');
 const productRoute = require('./routes/product');
 const authRoute = require('./routes/auth');
 
+// Express setup
+const app = express();
+app.use(express.json());
+app.set('views', path.join(__dirname, '/views/'));
+app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'mainLayout', layoutsDir: __dirname + '/views/layouts/' }));
+app.set('view engine', 'hbs');
 
 app.use(cookieParser());
 
@@ -21,20 +23,10 @@ app.use(express.urlencoded({
 }));
 
 
-app.use(express.json());
-app.set('views', path.join(__dirname, '/views/'));
-app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'mainLayout', layoutsDir: __dirname + '/views/layouts/' }));
-app.set('view engine', 'hbs');
-
-//Load static assets
+// Load static assets
 app.use(express.static('public'));
 
-
-app.listen(process.env.PORT || 3000, function(){
-    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-});
-
-
+// Routes
 app.get('/', verifyToken, async (req, res, next) => {
     if (!req.query.sort) {
         await appHelpers.getItems(req, res, next);
@@ -65,5 +57,10 @@ app.get('/filter', verifyToken, async (req, res, next) => {
 });
 
 
+app.listen(process.env.PORT || 3000, function(){
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
+
+// Routers
 app.use('/product', productRoute);
 app.use('/user', authRoute);

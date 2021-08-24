@@ -11,17 +11,23 @@ async function getItems(req, res, next) {
 }
 
 async function sortByPrice(query, req, res, next) {
-    // const items = await dbHelpers.getItems;
-    // if (query == "price-low-high") {
-    //     return items.sort({price:1}).lean();
-    // }
-    // else {
-    //     return items.sort({price:-1}).lean();
-    // }
+    const items = await dbHelpers.sortItemsPrice(query, next);
+    if (items) {
+        res.render("product/list", {
+            list: items
+        })
+        return;
+    }
 }
 
-function sortByName() {
-
+async function sortByName(req, res, next) {
+    const items = await dbHelpers.sortItemsName(next);
+    if (items) {
+        res.render("product/list", {
+            list: items
+        })
+        return;
+    }
 }
 
 module.exports = {

@@ -51,10 +51,10 @@
     <tbody>
         {{#each list}}
         <tr>
-            <td>{{name}}</td>
-            <td>{{category}}</td>
-            <td>{{quantity}}</td>
-            <td>{{price}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.category}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.price}}</td>
             <td>
                 <a href="/product/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
                 <a href="/product/delete/{{this._id}}"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>

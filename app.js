@@ -30,10 +30,6 @@ app.set('view engine', 'hbs');
 app.use(express.static('public'));
 
 
-// app.listen(3000, () => {
-//     console.log("Express server started at port : 3000");
-// });
-
 app.listen(process.env.PORT || 3000, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
@@ -41,73 +37,19 @@ app.listen(process.env.PORT || 3000, function(){
 
 app.get('/', verifyToken, async (req, res, next) => {
     if (!req.query.sort) {
-        // Product.find((err, docs) => {
-        //     if (!err) {
-        //         res.render("product/list", {
-        //             list: docs
-        //         });
-        //     }
-        //     else {
-        //         console.log('Error in retrieving product list: ' + err);
-        //     }
-        // }).lean();
         await appHelpers.getItems(req, res, next);
     }
     else {
         const sortQuery = req.query.sort;
         console.log(sortQuery);
         if (sortQuery == "price-low-high" || sortQuery == "price-high-low") {
-            sortByPrice(sortQuery, req, res);
-            const sortedItems = appHelpers.sortByPrice(sortQuery, req, res);
-            res.render("product/list", {
-                list: sortedItems
-            });
+            await appHelpers.sortByPrice(sortQuery, req, res, next);
         }
         else {
-            sortByName(req, res);
+            await appHelpers.sortByName(req, res, next);
         }
     }
 });
-
-function sortByPrice(query, req, res) {
-    if (query == "price-low-high") {
-        Product.find((err, docs) => {
-            if (!err) {
-                res.render("product/list", {
-                    list: docs
-                });
-            }
-            else {
-                console.log("Error while sorting");
-            }
-        }).sort({price:1}).lean();
-    }
-    else {
-        Product.find((err, docs) => {
-            if (!err) {
-                res.render("product/list", {
-                    list: docs
-                });
-            }
-            else {
-                console.log("Error while sorting");
-            }
-        }).sort({price:-1}).lean();
-    }
-}
-
-function sortByName(req, res) {
-    Product.find((err, docs) => {
-        if (!err) {
-            res.render("product/list", {
-                list: docs
-            });
-        }
-        else {
-            console.log("Error while sorting by name");
-        }
-    }).collation({'locale':'en'}).sort({name:1}).lean();
-}
 
 
 app.get('/search', (req, res) => {

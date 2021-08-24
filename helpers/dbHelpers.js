@@ -21,20 +21,39 @@ async function getItems(next) {
 }
 
 
-//     else {
-//         Product.find((err, docs) => {
-//             if (!err) {
-//                 res.render("product/list", {
-//                     list: docs
-//                 });
-//             }
-//             else {
-//                 console.log("Error while sorting");
-//             }
-//         }).sort({price:-1}).lean();
-//     }
-// };
+async function sortItemsPrice(query, next) {
+    if (query == "price-low-high") {
+        const items = await Product.find((err, findResult) => {
+            if (err) {
+                const errorMessage = `Error sorting products list: ${err}`;
+                handleError(errorMessage, next);
+            }
+        }).sort({price:1}).lean();
+        return items;
+    }
+    const items = await Product.find((err, findResult) => {
+        if (err) {
+            const errorMessage = `Error sorting products list: ${err}`;
+            handleError(errorMessage, next);
+        }
+    }).sort({ price: -1 }).lean();
+    return items
+};
+
+
+async function sortItemsName(next) {
+    const items = await Product.find((err, findResult) => {
+        if (err) {
+            const errorMessage = `Error sorting products list: ${err}`;
+            handleError(errorMessage, next);
+        }
+    }).collation({ 'locale': 'en' }).sort({ name: 1 }).lean();
+    return items;
+}
+
 
 module.exports = {
-    getItems
+    getItems,
+    sortItemsPrice,
+    sortItemsName
 }

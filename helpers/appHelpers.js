@@ -49,7 +49,6 @@ async function filterItems(filter, value, req, res, next) {
     if (isNaN(value) || value.length == 0) {
         res.redirect('/');
     }
-    
     const items = await dbHelpers.filterItemsList(filter, value, next);
     if (items) {
         res.render("product/list", {

@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
         return res.status(400).send('Email or password is incorrect');
     }
     
-    jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '300s'},  (err, token) => {
+    jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1200s'},  (err, token) => {
         if (err) {
             res.json('Invalid credentials');
         } else {

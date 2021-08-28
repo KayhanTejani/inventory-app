@@ -1,0 +1,27 @@
+<h3>{{viewTitle}}</h3>
+
+<form action="/sale" method="POST" autocomplete="off">
+    <input type="hidden" name="_id" value="{{product._id}}">
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" class="form-control" name="name" placeholder="Product Name" value="{{product.name}}">
+    </div>
+    <div class="form-group">
+        <label>Category</label>
+        <input type="text" class="form-control" name="category" placeholder="Category" value="{{product.category}}">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Price</label>
+            <input type="text" class="form-control" name="price" placeholder="Current Price" value="{{product.price}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Quantity</label>
+            <input type="text" class="form-control" name="quantity" placeholder="Quantity Sold" value="{{product.quantity}}">
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
+        <a class="btn btn-secondary" href="/sale"><i class="fa fa-list-alt"></i> View All</a>
+    </div>
+</form>

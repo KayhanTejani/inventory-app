@@ -6,7 +6,7 @@
     <hr>
 </div>
 
-<h3>Product List</h3>
+<h3>Sales</h3>
 
 
 <form action="/search" method="GET">
@@ -17,7 +17,7 @@
             <button type="submit" class="input-group-text border-0">
                 <i class="fa fa-search"></i>
             </button>
-            <a class="btn btn-secondary" href="/product" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Create New</a>
+            <a class="btn btn-secondary" href="/sale/new" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Make a Sale</a>
         </div>
     </div>
 </form>
@@ -54,6 +54,8 @@
             <th>Category</th>
             <th>Quantity</th>
             <th>Price</th>
+            <th>Discount %</th>
+            <th>Total</th>
             <th></th>
         </tr>
     </thead>
@@ -64,6 +66,8 @@
             <td>{{this.category}}</td>
             <td>{{this.quantity}}</td>
             <td>{{this.price}}</td>
+            <td>{{this.discount}}</td>
+            <td>{{this.total}}</td>
             <td>
                 <a href="/product/{{this._id}}"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a>
                 <a href="/product/delete/{{this._id}}"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>

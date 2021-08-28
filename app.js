@@ -8,6 +8,7 @@ const verifyToken = require('./routes/verifyToken');
 const appHelpers = require('./helpers/appHelpers');
 const productRoute = require('./routes/product');
 const authRoute = require('./routes/auth');
+const saleRoute = require('./routes/sale');
 
 // Express setup
 const app = express();
@@ -64,3 +65,4 @@ app.listen(process.env.PORT || 3000, function(){
 // Routers
 app.use('/product', productRoute);
 app.use('/user', authRoute);
+app.use('/sale', saleRoute);

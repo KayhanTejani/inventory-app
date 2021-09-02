@@ -1,23 +1,43 @@
 <h3>{{viewTitle}}</h3>
 
+<label for="products">Choose product being sold: </label>
+<select class="form-select form-select-sm" id="product" name="product" aria-label=".form-select-sm example"
+    style="position:relative; left:0em;">
+    <option selected></option>
+    {{#each product}}
+    <option>{{this.name}}</option>
+    {{/each}}
+</select>
+<hr>
+
 <form action="/sale" method="POST" autocomplete="off">
-    <input type="hidden" name="_id" value="{{product._id}}">
+    <input type="hidden" name="_id" value="{{this._id}}">
     <div class="form-group">
         <label>Name</label>
-        <input type="text" class="form-control" name="name" placeholder="Product Name" value="{{product.name}}">
+        <input type="text" class="form-control" name="name" placeholder="Product Name" value="{{product.name}}" disabled>
     </div>
     <div class="form-group">
         <label>Category</label>
-        <input type="text" class="form-control" name="category" placeholder="Category" value="{{product.category}}">
+        <input type="text" class="form-control" name="category" placeholder="Category" value="{{product.category}}" disabled>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label>Price</label>
-            <input type="text" class="form-control" name="price" placeholder="Current Price" value="{{product.price}}">
+            <input type="text" class="form-control" name="price" id="price" placeholder="Current Price" value="{{product.price}}" disabled>
         </div>
         <div class="form-group col-md-6">
-            <label>Quantity</label>
-            <input type="text" class="form-control" name="quantity" placeholder="Quantity Sold" value="{{product.quantity}}">
+            <label>Quantity (Available: {{product.quantity}})</label>
+            <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity" value="">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Discount %</label>
+            <input type="text" class="form-control" name="discount" id="discount" placeholder="Discount %" value="">
+        </div>
+        <div class="form-group col-md-6">
+            <label>Order Total</label>
+            <input type="text" class="form-control" name="total" id="total" placeholder="Order Total" value="" disabled>
         </div>
     </div>
     <div class="form-group">
@@ -25,3 +45,30 @@
         <a class="btn btn-secondary" href="/sale"><i class="fa fa-list-alt"></i> View All</a>
     </div>
 </form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+    //function populateFields() {
+    //    const productSelect = document.getElementById("product");
+    //    const productText = productSelect.options[productSelect.selectedIndex].text;
+
+    //    console.log(productSelect.options[productSelect.selectedIndex].text);
+    //}
+
+    const price = document.getElementById("price").value;
+
+    $(document).on('keyup', '#quantity', function() {
+        let quantity = document.getElementById("quantity").value;
+        let discount = document.getElementById("discount").value;
+        let total = (price * quantity) * (1-(discount/100));
+        document.getElementById("total").value = total;
+    });
+
+    $(document).on('keyup', '#discount', function() {
+        let quantity = document.getElementById("quantity").value;
+        let discount = document.getElementById("discount").value;
+        let total = (price * quantity) * (1-(discount/100));
+        document.getElementById("total").value = total;
+    })    
+</script>

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Sale = require('../models/sale.model');
+const Product = require('../models/product.model');
 const verifyToken = require('./verifyToken');
 
 
@@ -12,26 +13,48 @@ function handleError(errorMessage) {
 
 
 router.get('/', verifyToken, (req, res) => {
-    const items = Sale.find((err, findResult) => {
+    const sales = Sale.find((err, findResult) => {
         if (err) {
             const errorMessage = `Error getting sales list: ${err}`;
             handleError(errorMessage);
         }
     }).lean().exec();
 
-    if (items) {
-        res.render("sale/list", {
-            list: items
-        })
-        return;
+
+    if (sales) {
+        Product.find((err, findResult) => {
+            if (err) {
+                const errorMessage = `Error getting sales list: ${err}`;
+                handleError(errorMessage);
+            }
+            else {
+                res.render("sale/list", {
+                    list: sales,
+                    products: findResult
+                })
+                return;
+            }
+        }).lean().exec();
     }
 });
 
 router.get('/new', verifyToken, (req, res) => {
-    res.render("sale/addOrEdit", {
-        viewTitle: "Create Sale Entry"
-    });
+    const productName = req.query.product;
+    console.log(productName);
+    Product.find( {name: productName}, (err, findResult) => {
+        if (err) {
+            const errorMessage = `Error getting sales list: ${err}`;
+            handleError(errorMessage);
+        }
+        else {
+            res.render("sale/addOrEdit", {
+                viewTitle: "Create Sale Entry",
+                product: findResult[0]
+            });
+        }
+    }).lean().exec();
 });
+
 
 router.post('/new', (req, res) => {
     if (req.body._id == "")

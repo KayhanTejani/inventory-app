@@ -8,6 +8,30 @@
 
 <h3>Sales</h3>
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <form action="/sale/new" class="form-container">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <label for="products">Choose product being sold: </label>
+                    <select class="form-select form-select-sm" id="product" name="product"
+                        aria-label=".form-select-sm example" style="position:relative; left:0em;">
+                        <option selected></option>
+                        {{#each products}}
+                        <option>{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-info">Submit</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <form action="/search" method="GET">
     <div class="form-group">
@@ -17,7 +41,8 @@
             <button type="submit" class="input-group-text border-0">
                 <i class="fa fa-search"></i>
             </button>
-            <a class="btn btn-secondary" href="/sale/new" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Make a Sale</a>
+            <a class="btn btn-secondary" data-toggle="modal" data-target="#myModal" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Make a Sale</a>
+            {{!-- <a class="btn btn-secondary" href="/sale/new" onclick="openForm()" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Make a Sale</a> --}}
         </div>
     </div>
 </form>
@@ -79,9 +104,12 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script>
 
+    
     $(document).on('change', '#filterOption', function () {
         $('#filterBox').css('visibility', 'visible');
         $('#filterSubmit').css('visibility', 'visible');

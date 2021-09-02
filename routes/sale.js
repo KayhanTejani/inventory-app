@@ -12,14 +12,15 @@ function handleError(errorMessage) {
 }
 
 
-router.get('/', verifyToken, (req, res) => {
-    const sales = Sale.find((err, findResult) => {
+router.get('/', verifyToken, async (req, res, next) => {
+    const sales = await Sale.find((err, findResult) => {
         if (err) {
             const errorMessage = `Error getting sales list: ${err}`;
             handleError(errorMessage);
         }
     }).lean().exec();
 
+    console.log(sales);
 
     if (sales) {
         Product.find((err, findResult) => {
@@ -57,26 +58,29 @@ router.get('/new', verifyToken, (req, res) => {
 
 
 router.post('/new', (req, res) => {
-    if (req.body._id == "")
-        insertRecord(req, res);
-    else
-        updateRecord(req, res);
+    insertRecord(req, res);
+
+    // if (req.body._id == "")
+    //     insertRecord(req, res);
+    // else
+    //     updateRecord(req, res);
 });
 
 
 function insertRecord(req, res) {
+    console.log(req.body);
     const sale = new Sale({
         name: req.body.name,
         price: req.body.price,
         quantity: req.body.quantity,
         category: req.body.category,
         discount: req.body.discount,
-        total: req.body.discount
+        total: req.body.total
     });
     
     sale.save((err, doc) => {
         if (!err) {
-            res.redirect('/');
+            res.redirect('/sale');
         }
         else {
             console.log('Error during sale record insertion: ' + err);

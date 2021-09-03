@@ -68,7 +68,6 @@ router.post('/new', (req, res) => {
 
 
 function insertRecord(req, res) {
-    console.log(req.body);
     const sale = new Sale({
         name: req.body.name,
         price: req.body.price,
@@ -77,7 +76,13 @@ function insertRecord(req, res) {
         discount: req.body.discount,
         total: req.body.total
     });
-    
+
+    Product.findByIdAndUpdate({ _id: req.body._id }, { $inc: { quantity: -req.body.quantity } }, { new: true }, (err, findResult) => {
+        if (err) {
+            console.log("Could not update product quantity");
+        }
+    })
+
     sale.save((err, doc) => {
         if (!err) {
             res.redirect('/sale');

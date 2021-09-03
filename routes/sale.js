@@ -20,8 +20,6 @@ router.get('/', verifyToken, async (req, res, next) => {
         }
     }).lean().exec();
 
-    console.log(sales);
-
     if (sales) {
         Product.find((err, findResult) => {
             if (err) {

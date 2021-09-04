@@ -118,7 +118,7 @@ router.get('/:id', verifyToken, (req, res) => {
 router.get('/delete/:id', verifyToken, (req, res) => {
     Sale.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err)
-            res.redirect("/");
+            res.redirect("/sale");
         else
             console.log("Error while deleting sale: " + err);
     })

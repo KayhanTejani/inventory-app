@@ -13,12 +13,42 @@ function handleError(errorMessage) {
 
 
 router.get('/', verifyToken, async (req, res, next) => {
-    const sales = await Sale.find((err, findResult) => {
-        if (err) {
-            const errorMessage = `Error getting sales list: ${err}`;
-            handleError(errorMessage);
+    let sales;
+    if (!req.query.sort) {
+        sales = await Sale.find((err, findResult) => {
+            if (err) {
+                const errorMessage = `Error getting sales list: ${err}`;
+                handleError(errorMessage);
+            }
+        }).lean().exec();
+    }
+    else {
+        const sortQuery = req.query.sort;
+        if (sortQuery == "total-low-high") {
+            sales = await Sale.find((err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error sorting products list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).sort({ total: 1 }).lean();
         }
-    }).lean().exec();
+        else if (sortQuery == "total-high-low") {
+            sales = await Sale.find((err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error sorting products list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).sort({ total: -1 }).lean();
+        }
+        else {
+            sales = await Sale.find((err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error sorting products list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).collation({ 'locale': 'en' }).sort({ name: 1 }).lean();
+        }
+    }
 
     if (sales) {
         Product.find((err, findResult) => {

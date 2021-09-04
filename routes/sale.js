@@ -127,6 +127,66 @@ router.get('/search', verifyToken, async (req, res, next) => {
 });
 
 
+router.get('/filter', verifyToken, async (req, res, next) => {
+    const filter = req.query.option;
+    const value = req.query.filterValue;
+    let items;
+    if (isNaN(value) || value.length == 0) {
+        res.redirect('/sale');
+    }
+
+    switch (filter) {
+        case "equals":
+            items = await Sale.find({ total: { $eq: value } }, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering sales list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+            break;
+        case "less-than":
+            items = await Sale.find({ total: { $lt: value } }, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering sales list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+            break;
+        case "less-than-equal":
+            items = await Sale.find({ total: { $lte: value } }, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering sales list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+            break;
+        case "greater-than":
+            items = await Sale.find({ total: { $gt: value } }, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering sales list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+            break;
+        case "greater-than-equal":
+            items = await Sale.find({ total: { $gte: value } }, (err, findResult) => {
+                if (err) {
+                    const errorMessage = `Error filtering sales list: ${err}`;
+                    handleError(errorMessage, next);
+                }
+            }).lean();
+            break;
+    }
+
+    if (items) {
+        res.render("sale/list", {
+            list: items
+        })
+        return;
+    }
+});
+
+
 router.get('/:id', verifyToken, (req, res) => {
     Sale.findById(req.params.id, (err, doc) => {
         if (!err) {

@@ -103,6 +103,30 @@ function updateRecord(req, res) {
 }
 
 
+router.get('/search', verifyToken, async (req, res, next) => {
+    const searchQuery = req.query.name;
+    const regex = RegExp(".*" + searchQuery + ".*", 'i');
+    const items = await Sale.find({
+        "$or": [
+            { name: regex },
+            { category: regex }
+        ]
+    }, (err, findResult) => {
+        if (err) {
+            const errorMessage = `Error seaching sales list: ${err}`;
+            handleError(errorMessage, next);
+        }
+    }).lean();
+    
+    if (items) {
+        res.render("sale/list", {
+            list: items
+        })
+        return;
+    }
+});
+
+
 router.get('/:id', verifyToken, (req, res) => {
     Sale.findById(req.params.id, (err, doc) => {
         if (!err) {

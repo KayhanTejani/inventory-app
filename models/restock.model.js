@@ -13,6 +13,9 @@ let restockSchema = new mongoose.Schema({
     category: {
         type: String
     },
+    total: {
+        type: Number
+    },
     status: {
         type: String
     }

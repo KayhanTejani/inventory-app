@@ -117,12 +117,21 @@ function insertRecord(req, res) {
 }
 
 
-router.get('/complete/:id/:name', verifyToken, (req, res) => {
-    // Product.findByIdAndUpdate({ _id: req.body._id }, { $inc: { quantity: -req.body.quantity } }, { new: true }, (err, findResult) => {
-    //     if (err) {
-    //         console.log("Could not update product quantity");
-    //     }
-    // })
+router.get('/complete/:name/:quantity', verifyToken, (req, res) => {
+    Product.findOneAndUpdate({name: req.params.name}, { $inc: { quantity: req.params.quantity } }, { new: true }, (err, findResult) => {
+        if (err) {
+            console.log("Could not update product quantity");
+        }
+    })
+
+    Restock.findOneAndUpdate({name: req.params.name}, {status: "Completed"}, {new: true}, (err, findResult) => {
+        if (err) {
+            console.log("Could not update restock status");
+        }
+        else {
+            res.redirect('/restock');
+        }
+    })
 
     // Product.findById(req.params.id, (err, doc) => {
     //     if (!err) {

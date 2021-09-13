@@ -1,0 +1,119 @@
+<div>
+    <a class="btn btn-secondary" href="/" style="position:relative; left:0em"><i class="fas fa-boxes"></i> Products </a>
+    <a class="btn btn-secondary" href="/sale" style="position:relative; left:0.5em"><i class="fas fa-dollar-sign"></i> Sales </a>
+    <a class="btn btn-secondary" href="/restock" style="position:relative; left:1em"><i class="fas fa-truck"></i> Restock Inventory  </a>        
+    <a class="btn btn-secondary" href="/user/logout" style="position:absolute; right: 2em;"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+    <hr>
+</div>
+
+<h3>Restock Orders</h3>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <form action="/sale/new" class="form-container">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <label for="products">Choose product being restocked: </label>
+                    <select class="form-select form-select-sm" id="product" name="product"
+                        aria-label=".form-select-sm example" style="position:relative; left:0em;">
+                        <option selected></option>
+                        {{#each products}}
+                        <option>{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-info">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<form action="/sale/search" method="GET">
+    <div class="form-group">
+        <div class="input-group rounded">
+            <input type="text" class="form-control rounded col-md-3" name="name" placeholder="Search" aria-label="Search"
+            aria-describedby="search-addon" />
+            <button type="submit" class="input-group-text border-0">
+                <i class="fa fa-search"></i>
+            </button>
+            <a class="btn btn-secondary" data-toggle="modal" data-target="#myModal" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Order Stock</a>
+            {{!-- <a class="btn btn-secondary" href="/sale/new" onclick="openForm()" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Make a Sale</a> --}}
+        </div>
+    </div>
+</form>
+
+<form>
+    <select class="form-select form-select-sm" name="sort" onchange="this.form.submit();" aria-label=".form-select-sm example" style="float:right;">
+        <option selected>Sort by:</option>
+        <option value="total-low-high">Total: Low to High</option>
+        <option value="total-high-low">Total: High to Low</option>
+        <option value="name-order">Name</option>
+    </select>
+</form>
+
+<form action="/sale/filter" method="GET">
+    <select class="form-select form-select-sm" name="option" id="filterOption"
+        aria-label=".form-select-sm example" style="float:left;">
+        <option selected>Select filter:</option>
+        <option value="equals">Total: Equals</option>
+        <option value="less-than">Total: Less than</option>
+        <option value="less-than-equal">Total: Less than or equal</option>
+        <option value="greater-than">Total: Greater than</option>
+        <option value="greater-than-equal">Total: Greater than or equal</option>
+    </select>
+    <input type="text" id="filterBox" class="form-control rounded small col-md-1" name="filterValue" style="float:left; visibility:hidden;">
+    <button type="submit" id="filterSubmit" style="float:left; visibility:hidden;">Filter</button>
+</form>
+
+<br>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.category}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.total}}</td>
+            <td>{{this.status}}</td>
+            <td>
+                <a href="/restock/{{this._id}}"><i class="fa fa-check fa-lg" aria-hidden="true"></i></a>
+                <a href="/restock/delete/{{this._id}}"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+
+    
+    $(document).on('change', '#filterOption', function () {
+        $('#filterBox').css('visibility', 'visible');
+        $('#filterSubmit').css('visibility', 'visible');
+       
+    });
+
+</script>

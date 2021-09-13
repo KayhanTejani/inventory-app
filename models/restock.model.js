@@ -13,8 +13,8 @@ let restockSchema = new mongoose.Schema({
     category: {
         type: String
     },
-    completed: {
-        type: Boolean
+    status: {
+        type: String
     }
 });
 

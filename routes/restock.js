@@ -61,4 +61,86 @@ router.get('/', verifyToken, async (req, res, next) => {
     }
 });
 
+
+router.get('/new', verifyToken, (req, res) => {
+    const productName = req.query.product;
+    console.log(productName);
+    Product.find( {name: productName}, (err, findResult) => {
+        if (err) {
+            const errorMessage = `Error getting sales list: ${err}`;
+            handleError(errorMessage);
+        }
+        else {
+            res.render("restock/addOrEdit", {
+                viewTitle: "Create Restock Entry",
+                product: findResult[0]
+            });
+        }
+    }).lean().exec();
+});
+
+
+router.post('/new', (req, res) => {
+    insertRecord(req, res);
+
+    // if (req.body._id == "")
+    //     insertRecord(req, res);
+    // else
+    //     updateRecord(req, res);
+});
+
+
+function insertRecord(req, res) {
+    const restock = new Restock({
+        name: req.body.name,
+        price: req.body.price,
+        quantity: req.body.quantity,
+        category: req.body.category,
+        total: req.body.total,
+        status: "Processing"
+    });
+
+    // Product.findByIdAndUpdate({ _id: req.body._id }, { $inc: { quantity: -req.body.quantity } }, { new: true }, (err, findResult) => {
+    //     if (err) {
+    //         console.log("Could not update product quantity");
+    //     }
+    // })
+
+    restock.save((err, doc) => {
+        if (!err) {
+            res.redirect('/restock');
+        }
+        else {
+            console.log('Error during restock record insertion: ' + err);
+        }
+    });
+}
+
+
+router.get('/complete/:id/:name', verifyToken, (req, res) => {
+    // Product.findByIdAndUpdate({ _id: req.body._id }, { $inc: { quantity: -req.body.quantity } }, { new: true }, (err, findResult) => {
+    //     if (err) {
+    //         console.log("Could not update product quantity");
+    //     }
+    // })
+
+    // Product.findById(req.params.id, (err, doc) => {
+    //     if (!err) {
+    //         res.render("product/addOrEdit", {
+    //             viewTitle: "Update Product",
+    //             product: doc
+    //         });
+    //     }
+    // }).lean();
+});
+
+router.get('/delete/:id', verifyToken, (req, res) => {
+    Restock.findByIdAndRemove(req.params.id, (err, doc) => {
+        if (!err)
+            res.redirect("/restock");
+        else
+            console.log("Error while deleting restock order: " + err);
+    })
+});
+
 module.exports = router;

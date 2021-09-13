@@ -11,7 +11,7 @@
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-        <form action="/sale/new" class="form-container">
+        <form action="/restock/new" class="form-container">
             <div class="modal-content">
                 <div class="modal-body">
                     <label for="products">Choose product being restocked: </label>
@@ -33,7 +33,7 @@
 </div>
 
 
-<form action="/sale/search" method="GET">
+<form action="/restock/search" method="GET">
     <div class="form-group">
         <div class="input-group rounded">
             <input type="text" class="form-control rounded col-md-3" name="name" placeholder="Search" aria-label="Search"
@@ -56,7 +56,7 @@
     </select>
 </form>
 
-<form action="/sale/filter" method="GET">
+<form action="/restock/filter" method="GET">
     <select class="form-select form-select-sm" name="option" id="filterOption"
         aria-label=".form-select-sm example" style="float:left;">
         <option selected>Select filter:</option>
@@ -94,7 +94,7 @@
             <td>{{this.total}}</td>
             <td>{{this.status}}</td>
             <td>
-                <a href="/restock/{{this._id}}"><i class="fa fa-check fa-lg" aria-hidden="true"></i></a>
+                <a href="/restock/complete/{{this.name}}/{{this.quantity}}"><i class="fa fa-check fa-lg" aria-hidden="true"></i></a>
                 <a href="/restock/delete/{{this._id}}"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
             </td>
         </tr>

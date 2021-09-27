@@ -47,3 +47,15 @@ html, .row{
 td, tr {
     text-align: center;
 }
+
+#navbar {
+    background-color: #C75E43;
+}
+
+.nav-item{
+    background-color: #006572;
+}
+
+.nav-link {
+    color: #fff;
+}

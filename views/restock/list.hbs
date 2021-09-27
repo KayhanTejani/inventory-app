@@ -38,11 +38,10 @@
         <div class="input-group rounded">
             <input type="text" class="form-control rounded col-md-3" name="name" placeholder="Search" aria-label="Search"
             aria-describedby="search-addon" />
-            <button type="submit" class="input-group-text border-0">
+            <button type="submit" id="search" class="input-group-text border-0">
                 <i class="fa fa-search"></i>
             </button>
-            <a class="btn btn-secondary" data-toggle="modal" data-target="#myModal" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Order Stock</a>
-            {{!-- <a class="btn btn-secondary" href="/sale/new" onclick="openForm()" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Make a Sale</a> --}}
+            <a class="btn btn-secondary" id="create" data-toggle="modal" data-target="#myModal" style="position:absolute; right:0;"><i class="fa fa-plus"></i> Order Stock</a>
         </div>
     </div>
 </form>
@@ -95,7 +94,7 @@
             <td>{{this.status}}</td>
             <td>
                 <a href="/restock/complete/{{this.name}}/{{this.quantity}}"><i class="fa fa-check fa-lg" aria-hidden="true"></i></a>
-                <a href="/restock/delete/{{this._id}}"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                <a href="/restock/delete/{{this._id}}"><i class="fa fa-trash fa-lg" id="delete" aria-hidden="true"></i></a>
             </td>
         </tr>
         {{/each}}

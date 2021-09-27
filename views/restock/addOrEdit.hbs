@@ -29,16 +29,9 @@
             <input type="hidden" id="qty-available" value="{{product.quantity}}">
             <label>Quantity (Available: {{product.quantity}})</label>
             <input type="text" class="form-control" name="quantity" id="quantity" placeholder="Quantity" value="">
-            {{!-- <small style="display:none" id="qtyHelp" class="text-danger">
-                Desired quantity not available in inventory
-            </small>       --}}
         </div>
     </div>
     <div class="form-row">
-        {{!-- <div class="form-group col-md-6">
-            <label>Discount %</label>
-            <input type="text" class="form-control" name="discount" id="discount" placeholder="Discount %" value="0">
-        </div> --}}
         <div class="form-group col-md-6">
             <label>Order Total</label>
             <input type="text" class="form-control" name="total" id="total" placeholder="Order Total" value="" readonly>
@@ -46,7 +39,7 @@
     </div>
     <div class="form-group">
         <button type="submit" id="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
-        <a class="btn btn-secondary" href="/restock"><i class="fa fa-list-alt"></i> View All</a>
+        <a class="btn btn-secondary" id="view-all" href="/restock"><i class="fa fa-list-alt"></i> View All</a>
     </div>
 </form>
 
@@ -68,16 +61,12 @@
 
     $(document).on('keyup', '#quantity', function() {
         let quantity = parseInt(document.getElementById("quantity").value);
-        //let discount = parseInt(document.getElementById("discount").value);
-        //let total = (price * quantity) * (1-(discount/100));
         let total = price * quantity;
         document.getElementById("total").value = total;
     });
 
     $(document).on('keyup', '#discount', function() {
         let quantity = parseInt(document.getElementById("quantity").value);
-        //let discount = parseInt(document.getElementById("discount").value);
-        //let total = (price * quantity) * (1-(discount/100));
         let total = price * quantity;
         document.getElementById("total").value = total;
     })    

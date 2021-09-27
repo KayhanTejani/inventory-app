@@ -7,6 +7,10 @@ html, .row{
     color: white;
 }
 
+#edit {
+    color: #006572
+}
+
 #delete{
     color: #d11a2a;
 }

@@ -1,3 +1,16 @@
+html, .row{
+    background-color: #006572;
+}
+
+#create, #search, #view-all{
+    background-color: #102921;
+    color: white;
+}
+
+#delete{
+    color: #d11a2a;
+}
+
 .signup-form .form-group {
     margin-bottom: 20px;
 }

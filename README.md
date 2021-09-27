@@ -6,6 +6,11 @@
 
  This project is made with a frontend of HTML + CSS + Bootstrap, a backend of JavaScript + Express and a MongoDB database to store items.
  
+ **To test deployed version on Heroku, log in with:**
+ * email: japple@gmail.com
+ * password: testing
+ 
+ 
   ## Data Model
 
  The application stores Users, Products, Sales and Restocks
